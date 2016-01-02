@@ -13,9 +13,17 @@ public class Symbol {
     Scope scope;      // All symbols know what scope contains them.
     String typeName;  // when type is user define type this variable is a clue.
 
-    public Symbol(String name) { this.name = name; }
-    public Symbol(String name, Type type) { this(name); this.type = type; }
-    public String getName() { return name; }
+    public Symbol(String name) {
+        this.name = name;
+    }
+    public Symbol(String name, Type type) {
+        this(name);
+        this.type = type;
+    }
+
+    public String getName() {
+        return this.name;
+    }
 
     public String toString() {
         if ( type!=Type.tVoid ) return '<'+getName()+":"+type+'>';
