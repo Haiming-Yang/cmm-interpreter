@@ -60,7 +60,19 @@ public class Compiler {
                 Trees.inspect(parseTree, parser);
             }
             ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(new MyCmmListener(outputArea), parseTree);
+
+            // 语法分析阶段，分析语法错误
+            SyntaxPhase syntaxPhase = new SyntaxPhase(outputArea);
+            walker.walk(syntaxPhase, parseTree);
+
+            // 定义阶段，将变量放入符号表
+            DefinePhase definePhase = new DefinePhase();
+            walker.walk(definePhase, parseTree);
+
+            // 引用阶段，变量作用域检查
+            ReferPhase referPhase = new ReferPhase(definePhase.globals, definePhase.scopes);
+            walker.walk(referPhase, parseTree);
+
         }catch (Exception e){
             outputArea.append(e.getMessage());
         }

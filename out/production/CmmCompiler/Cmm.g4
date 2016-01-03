@@ -18,9 +18,9 @@ stmt : var_decl |
 		write_stmt | 
 		stmt_block ;   //语句
 stmt_block : LBigBracket (stmt)+ RBigBracket ;      //语句块
-var_decl : type varlist LineEnd | type Ident Assign expr LineEnd;    //变量申明
-type : Int | Real | type LMidBracket IntConstant RMidBracket ;
-varlist : Ident | Ident(Comma Ident)+ ;
+var_decl : type varlist LineEnd ;    //变量申明
+type : Int | Real ; //类型
+varlist : Ident(LMidBracket IntConstant RMidBracket)?(Assign expr)?(Comma Ident(LMidBracket IntConstant RMidBracket)?(Assign expr)?)* ; // 变量列表
 if_stmt : If LBracket expr RBracket (stmt | stmt_block) (Else (stmt | stmt_block))? ;
 while_stmt : While LBracket expr RBracket (stmt | stmt_block) ;
 break_stmt : Break LineEnd ;

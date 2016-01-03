@@ -7,5 +7,6 @@ package app;
 public enum Type {
     tInt,
     tReal,
-    tVoid
+    tIntArray,
+    tRealArray
 }
