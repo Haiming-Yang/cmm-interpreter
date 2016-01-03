@@ -1,5 +1,7 @@
 package app;
 
+import antlr.CmmParser;
+
 /**
  * Created by TangJiong on 2015/11/30.
  * A dictionary for translating token type
@@ -11,56 +13,56 @@ public class TokenDictionary {
         String type = null;
 
         switch(typeCode){
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
+            case CmmParser.If:
+            case CmmParser.Else:
+            case CmmParser.While:
+            case CmmParser.Read:
+            case CmmParser.Write:
+            case CmmParser.Int:
+            case CmmParser.Real:
+            case CmmParser.Break:
                 type = "keyword";
                 break;
-            case 9:
+            case CmmParser.Ident:
                 type = "identifier";
                 break;
-            case 10:
+            case CmmParser.IntConstant:
                 type = "int constant";
                 break;
-            case 11:
-                type = "double constant";
+            case CmmParser.RealConstant:
+                type = "real constant";
                 break;
-            case 12:
+            case CmmParser.BooleanConstant:
                 type = "boolean constant";
                 break;
-            case 13:
+            case CmmParser.Operator:
                 type = "operator";
                 break;
-            case 14:
+            case CmmParser.Sign:
                 type = "sign";
                 break;
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-            case 20:
+            case CmmParser.LBracket:
+            case CmmParser.RBracket:
+            case CmmParser.LBigBracket:
+            case CmmParser.RBigBracket:
+            case CmmParser.LMidBracket:
+            case CmmParser.RMidBracket:
                 type = "bracket";
                 break;
-            case 21:
+            case CmmParser.Assign:
                 type = "assign symbol";
                 break;
-            case 22:
+            case CmmParser.LineEnd:
                 type = "semicolon";
                 break;
-            case 23:
+            case CmmParser.Comma:
                 type = "comma";
                 break;
-            case 24:
+            case CmmParser.WS:
                 type = "white space";
                 break;
-            case 25:
-            case 26:
+            case CmmParser.SL_COMMENT:
+            case CmmParser.MUL_COMMENT:
                 type = "comment";
                 break;
             default:

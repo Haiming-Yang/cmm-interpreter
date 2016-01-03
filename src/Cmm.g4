@@ -20,15 +20,16 @@ stmt : var_decl |
 stmt_block : LBigBracket (stmt)+ RBigBracket ;      //语句块
 var_decl : type varlist LineEnd ;    //变量申明
 type : Int | Real ; //类型
-varlist : Ident(LMidBracket IntConstant RMidBracket)?(Assign expr)?(Comma Ident(LMidBracket IntConstant RMidBracket)?(Assign expr)?)* ; // 变量列表
+varlist : (Ident | decl_assign | array)(Comma (Ident | decl_assign | array))* ; // 变量列表
+decl_assign : Ident Assign expr ; //声明同时赋值
 if_stmt : If LBracket expr RBracket (stmt | stmt_block) (Else (stmt | stmt_block))? ;
 while_stmt : While LBracket expr RBracket (stmt | stmt_block) ;
 break_stmt : Break LineEnd ;
-read_stmt : Read LBracket Ident RBracket LineEnd |
-			Read LBracket Ident LMidBracket IntConstant RMidBracket RBracket LineEnd;
+read_stmt : Read LBracket (Ident | array) RBracket LineEnd ;
 write_stmt : Write LBracket expr RBracket LineEnd;
 assign_stmt : value Assign expr LineEnd ;
-value : Ident LMidBracket IntConstant RMidBracket | Ident | constant;
+value : array | Ident | constant;
+array : Ident LMidBracket IntConstant RMidBracket ;
 constant : IntConstant | RealConstant | BooleanConstant ;
 expr : expr Operator expr |
 		LBracket expr RBracket |
@@ -47,7 +48,7 @@ Int : 'int' ;
 Real : 'real' ;
 Break : 'break' ;
 // 标识符
-Ident :  [A-z]([A-z] | '_' | [0-9])*;
+Ident :  [a-zA-Z]([a-zA-Z] | '_' | [0-9])*;
 // 常量
 IntConstant : '0' | [1-9][0-9]*;  //带符号，base 10，暂未实现base 16
 RealConstant : IntConstant('.'([0-9]+))? ; //带符号

@@ -20,6 +20,7 @@ public class ReferPhase extends CmmBaseListener {
         this.scopes = scopes;
     }
 
+    // 下列语句中需要切换作用域
     @Override
     public void enterProgram(CmmParser.ProgramContext ctx) {
         super.enterProgram(ctx);
@@ -62,62 +63,42 @@ public class ReferPhase extends CmmBaseListener {
         currentScope = currentScope.getEnclosingScope();
     }
 
-    @Override
-    public void enterRead_stmt(CmmParser.Read_stmtContext ctx) {
-        super.enterRead_stmt(ctx);
-    }
-
+    // 执行到下面的语句时，需要判断变量是否已定义
     @Override
     public void exitRead_stmt(CmmParser.Read_stmtContext ctx) {
         super.exitRead_stmt(ctx);
-        Token token = ctx.Ident().getSymbol();
+        Token token = null;
+        if(ctx.Ident() == null){
+            token = ctx.array().Ident().getSymbol();
+        }else{
+            token = ctx.Ident().getSymbol();
+        }
         String varName = token.getText();
         Symbol var = currentScope.resolve(varName);
         if(var == null){
-            System.out.println("ERROR: <"
+            System.out.println("ERROR: no such variable <"
                     + varName
-                    + "> no such variable in line"
+                    + "> in line"
                     + token.getLine()
                     + ":" + token.getCharPositionInLine());
         }
     }
 
     @Override
-    public void enterWrite_stmt(CmmParser.Write_stmtContext ctx) {
-        super.enterWrite_stmt(ctx);
-    }
-
-    @Override
-    public void exitWrite_stmt(CmmParser.Write_stmtContext ctx) {
-        super.exitWrite_stmt(ctx);
-        Token token = ctx.expr().value().Ident().getSymbol();
-        String varName = token.getText();
-        Symbol var = currentScope.resolve(varName);
-        if(var == null){
-            System.out.println("ERROR: <"
-                    + varName
-                    + "> no such variable in line"
-                    + token.getLine()
-                    + ":" + token.getCharPositionInLine());
+    public void exitValue(CmmParser.ValueContext ctx) {
+        super.exitValue(ctx);
+        Token token = null;
+        if(ctx.Ident() == null){
+            token = ctx.array().Ident().getSymbol();
+        }else{
+            token = ctx.Ident().getSymbol();
         }
-    }
-
-    @Override
-    public void enterAssign_stmt(CmmParser.Assign_stmtContext ctx) {
-        super.enterAssign_stmt(ctx);
-
-    }
-
-    @Override
-    public void exitAssign_stmt(CmmParser.Assign_stmtContext ctx) {
-        super.exitAssign_stmt(ctx);
-        Token token = ctx.value().Ident().getSymbol();
         String varName = token.getText();
         Symbol var = currentScope.resolve(varName);
         if(var == null){
-            System.out.println("ERROR: <"
+            System.out.println("ERROR: no such variable <"
                     + varName
-                    + "> no such variable in line"
+                    + "> in line"
                     + token.getLine()
                     + ":" + token.getCharPositionInLine());
         }

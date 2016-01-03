@@ -46,6 +46,12 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarlist(CmmParser.VarlistContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link CmmParser#decl_assign}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDecl_assign(CmmParser.Decl_assignContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link CmmParser#if_stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -87,6 +93,12 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitValue(CmmParser.ValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#array}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArray(CmmParser.ArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CmmParser#constant}.
 	 * @param ctx the parse tree

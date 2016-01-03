@@ -87,6 +87,18 @@ public class CmmBaseListener implements CmmListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDecl_assign(CmmParser.Decl_assignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDecl_assign(CmmParser.Decl_assignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIf_stmt(CmmParser.If_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -166,6 +178,18 @@ public class CmmBaseListener implements CmmListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitValue(CmmParser.ValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArray(CmmParser.ArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArray(CmmParser.ArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
