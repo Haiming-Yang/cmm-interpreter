@@ -106,9 +106,45 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitConstant(CmmParser.ConstantContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CmmParser#expr}.
+	 * Visit a parse tree produced by the {@code SignExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr(CmmParser.ExprContext ctx);
+	T visitSignExpr(CmmParser.SignExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ValueExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValueExpr(CmmParser.ValueExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code MulDivExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMulDivExpr(CmmParser.MulDivExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AddMinExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddMinExpr(CmmParser.AddMinExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code CompareExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCompareExpr(CmmParser.CompareExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParenthesesExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenthesesExpr(CmmParser.ParenthesesExprContext ctx);
 }

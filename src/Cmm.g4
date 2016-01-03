@@ -30,12 +30,13 @@ write_stmt : Write LBracket expr RBracket LineEnd;
 assign_stmt : value Assign expr LineEnd ;
 value : array | Ident | constant;
 array : Ident LMidBracket IntConstant RMidBracket ;
-constant : IntConstant | RealConstant | BooleanConstant ;
-expr : expr Operator expr |
-		LBracket expr RBracket |
-		Sign expr |
-		value |
-		constant ;
+constant : IntConstant | RealConstant ;
+expr : expr MulDivMod expr #MulDivExpr | //乘除，取模运算
+        expr AddMin expr #AddMinExpr | // 加减运算，正负号
+        expr CompOp expr #CompareExpr | // 比较运算
+		LBracket expr RBracket #ParenthesesExpr | //括号运算
+		value #ValueExpr | // 值
+		AddMin expr #SignExpr ;
 
 // ===========词素定义=================================
 // 关键字(保留字)
@@ -54,9 +55,9 @@ IntConstant : '0' | [1-9][0-9]*;  //带符号，base 10，暂未实现base 16
 RealConstant : IntConstant('.'([0-9]+))? ; //带符号
 BooleanConstant : 'true' | 'false' ;
 // 操作符
-Operator : '+' | '-' | '*' | '/' | '%' | '<=' | '>=' | '>' | '<' | '!=' | '==' | '<>' ;
-// 正负号
-Sign : '+' | '-' ;
+CompOp : '<=' | '>=' | '>' | '<' | '!=' | '==' | '<>' ; //比较
+MulDivMod : '*' | '/' | '%'; //一级运算 乘除取模
+AddMin : '+' | '-' ; //二级运算 加减 正负号
 // 括号
 LBracket : '(' ;
 RBracket : ')' ;

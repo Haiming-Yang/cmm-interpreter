@@ -76,6 +76,7 @@ public class ReferPhase extends CmmBaseListener {
         String varName = token.getText();
         Symbol var = currentScope.resolve(varName);
         if(var == null){
+            // TODO 将信息输出到UI
             System.out.println("ERROR: no such variable <"
                     + varName
                     + "> in line"
@@ -96,11 +97,72 @@ public class ReferPhase extends CmmBaseListener {
         String varName = token.getText();
         Symbol var = currentScope.resolve(varName);
         if(var == null){
+            // TODO 将信息输出到UI
             System.out.println("ERROR: no such variable <"
                     + varName
                     + "> in line"
                     + token.getLine()
                     + ":" + token.getCharPositionInLine());
         }
+    }
+
+    @Override
+    public void exitParenthesesExpr(CmmParser.ParenthesesExprContext ctx) {
+        super.exitParenthesesExpr(ctx);
+    }
+
+    @Override
+    public void enterParenthesesExpr(CmmParser.ParenthesesExprContext ctx) {
+        super.enterParenthesesExpr(ctx);
+    }
+
+    @Override
+    public void exitCompareExpr(CmmParser.CompareExprContext ctx) {
+        super.exitCompareExpr(ctx);
+    }
+
+    @Override
+    public void enterCompareExpr(CmmParser.CompareExprContext ctx) {
+        super.enterCompareExpr(ctx);
+    }
+
+    @Override
+    public void exitAddMinExpr(CmmParser.AddMinExprContext ctx) {
+        super.exitAddMinExpr(ctx);
+    }
+
+    @Override
+    public void enterAddMinExpr(CmmParser.AddMinExprContext ctx) {
+        super.enterAddMinExpr(ctx);
+    }
+
+    @Override
+    public void exitMulDivExpr(CmmParser.MulDivExprContext ctx) {
+        super.exitMulDivExpr(ctx);
+    }
+
+    @Override
+    public void enterMulDivExpr(CmmParser.MulDivExprContext ctx) {
+        super.enterMulDivExpr(ctx);
+    }
+
+    @Override
+    public void exitValueExpr(CmmParser.ValueExprContext ctx) {
+        super.exitValueExpr(ctx);
+    }
+
+    @Override
+    public void enterValueExpr(CmmParser.ValueExprContext ctx) {
+        super.enterValueExpr(ctx);
+    }
+
+    @Override
+    public void exitSignExpr(CmmParser.SignExprContext ctx) {
+        super.exitSignExpr(ctx);
+    }
+
+    @Override
+    public void enterSignExpr(CmmParser.SignExprContext ctx) {
+        super.enterSignExpr(ctx);
     }
 }

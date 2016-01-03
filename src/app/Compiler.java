@@ -79,14 +79,8 @@ public class Compiler {
 
     }
 
-    public boolean isShowLexerResult() {
-        return showLexerResult;
-    }
     public void setShowLexerResult(boolean showLexerResult) {
         this.showLexerResult = showLexerResult;
-    }
-    public boolean isShowAST() {
-        return showAST;
     }
     public void setShowAST(boolean showAST) {
         this.showAST = showAST;

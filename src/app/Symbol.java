@@ -1,7 +1,5 @@
 package app;
 
-import antlr.CmmParser;
-
 /**
  * Created by TangfJiong on 2016/1/2.
  * A generic programming language symbol
@@ -21,10 +19,15 @@ public class Symbol {
         this(name);
         this.type = type;
     }
+    public Symbol(String name, Type type, Object value){
+        this(name, type);
+        this.value = value;
+    }
 
     public String getName() {
         return this.name;
     }
+    public Object getValue() { return this.value; }
 
     public Type getType(){
         return type;

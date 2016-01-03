@@ -32,6 +32,9 @@ public class DefinePhase extends CmmBaseListener {
     @Override
     public void exitProgram(CmmParser.ProgramContext ctx) {
         super.exitProgram(ctx);
+//        if(Constant.DEBUG){
+//            System.out.println(scopes.toString());
+//        }
     }
 
     @Override

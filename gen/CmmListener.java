@@ -167,13 +167,75 @@ public interface CmmListener extends ParseTreeListener {
 	 */
 	void exitConstant(CmmParser.ConstantContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CmmParser#expr}.
+	 * Enter a parse tree produced by the {@code SignExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpr(CmmParser.ExprContext ctx);
+	void enterSignExpr(CmmParser.SignExprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CmmParser#expr}.
+	 * Exit a parse tree produced by the {@code SignExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpr(CmmParser.ExprContext ctx);
+	void exitSignExpr(CmmParser.SignExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ValueExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterValueExpr(CmmParser.ValueExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ValueExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitValueExpr(CmmParser.ValueExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MulDivExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMulDivExpr(CmmParser.MulDivExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MulDivExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMulDivExpr(CmmParser.MulDivExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AddMinExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddMinExpr(CmmParser.AddMinExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AddMinExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddMinExpr(CmmParser.AddMinExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CompareExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterCompareExpr(CmmParser.CompareExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CompareExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitCompareExpr(CmmParser.CompareExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ParenthesesExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenthesesExpr(CmmParser.ParenthesesExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ParenthesesExpr}
+	 * labeled alternative in {@link CmmParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenthesesExpr(CmmParser.ParenthesesExprContext ctx);
 }

@@ -35,11 +35,10 @@ public class TokenDictionary {
             case CmmParser.BooleanConstant:
                 type = "boolean constant";
                 break;
-            case CmmParser.Operator:
+            case CmmParser.MulDivMod:
+            case CmmParser.CompOp:
+            case CmmParser.AddMin:
                 type = "operator";
-                break;
-            case CmmParser.Sign:
-                type = "sign";
                 break;
             case CmmParser.LBracket:
             case CmmParser.RBracket:
