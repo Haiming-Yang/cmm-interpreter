@@ -11,7 +11,7 @@ import javax.swing.text.*;
  * The UI and front-end of the program.
  */
 public class Editor extends JFrame {
-	JTextPane textPane = new JTextPane();
+	HighlightJPane textPane = new HighlightJPane();
 	JLabel fileNameLable= new JLabel("newfile");
 	JTextArea consoleArea = new JTextArea();
 	JFileChooser filechooser = new JFileChooser();
@@ -108,6 +108,7 @@ public class Editor extends JFrame {
 					fileNameLable.setText(f.getName());
 					InputStream is = new FileInputStream(f);
 					textPane.read(is, "d");
+                    textPane.syntaxParse();
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
