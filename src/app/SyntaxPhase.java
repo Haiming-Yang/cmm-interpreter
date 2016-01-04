@@ -14,16 +14,16 @@ import javax.swing.*;
  */
 public class SyntaxPhase extends CmmBaseListener {
 
-    private JTextArea consoleArea;
+    private IOInterface io;
 
-    public SyntaxPhase(JTextArea consoleArea){
-        this.consoleArea = consoleArea;
+    public SyntaxPhase(IOInterface io){
+        this.io = io;
     }
 
     @Override
     public void visitErrorNode(ErrorNode node) {
         super.visitErrorNode(node);
-        consoleArea.append("ERROR: " + node.getText()
+        io.output("ERROR: " + node.getText()
                 +" in line " + node.getSymbol().getLine()
                 +":" +node.getSymbol().getCharPositionInLine()
                 +"\n");

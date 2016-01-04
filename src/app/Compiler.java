@@ -22,29 +22,29 @@ public class Compiler {
     private boolean showLexerResult = true;
     private boolean showAST = true;
     private String source;
-    private JTextArea outputArea;
+    private IOInterface io;
 
-    public Compiler(String source, JTextArea outputArea){
+    public Compiler(String source, IOInterface io){
         this.source = source;
-        this.outputArea = outputArea;
+        this.io = io;
     }
 
     public void run(){
 
         try{
 
-            outputArea.append("====== compiler starting... ======\n");
+            io.output("====== compiler starting... ======\n");
 
             CmmLexer lexer = new CmmLexer(new ANTLRInputStream(source));
 
             // ===================== 词法分析 =======================
             if(showLexerResult){
-                outputArea.append("====== lexer analysis result: ======\n");
-                outputArea.append("Token\tLine\tType\n");
+                io.output("====== lexer analysis result: ======\n");
+                io.output("Token\tLine\tType\n");
                 List<CmmToken> tokenList = (List<CmmToken>) lexer.getAllTokens();
                 for(Token token : tokenList){
 
-                    outputArea.append(token.getText() + "\t" + token.getLine()
+                    io.output(token.getText() + "\t" + token.getLine()
                             + "\t" + TokenDictionary.getTokenType(token.getType()) + "\n");
 
                 }
@@ -56,25 +56,30 @@ public class Compiler {
             CmmParser parser = new CmmParser(tokenStream);
             ParseTree parseTree = parser.program();
             if(showAST){
-                outputArea.append("====== show tree ======\n");
+                io.output("====== show tree ======\n");
                 Trees.inspect(parseTree, parser);
             }
             ParseTreeWalker walker = new ParseTreeWalker();
 
             // 语法分析阶段，分析语法错误
-            SyntaxPhase syntaxPhase = new SyntaxPhase(outputArea);
+            SyntaxPhase syntaxPhase = new SyntaxPhase(io);
             walker.walk(syntaxPhase, parseTree);
 
             // 定义阶段，将变量放入符号表
-            DefinePhase definePhase = new DefinePhase();
-            walker.walk(definePhase, parseTree);
+            DefPhaseListener defPhaseListener = new DefPhaseListener(io);
+            walker.walk(defPhaseListener, parseTree);
 
             // 引用阶段，变量作用域检查
-            ReferPhase referPhase = new ReferPhase(definePhase.globals, definePhase.scopes);
-            walker.walk(referPhase, parseTree);
+            RefPhaseListener refPhaseListener = new RefPhaseListener(defPhaseListener.globals,
+                    defPhaseListener.scopes,
+                    io);
+            walker.walk(refPhaseListener, parseTree);
 
         }catch (Exception e){
-            outputArea.append(e.getMessage());
+            io.output(e.getMessage());
+            if(Constant.DEBUG){
+                e.printStackTrace();
+            }
         }
 
     }

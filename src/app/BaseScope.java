@@ -27,6 +27,10 @@ public abstract class BaseScope implements Scope {
         sym.scope = this; // track the scope in each symbol
     }
 
+    public boolean redundant(String name){
+        return symbols.get(name) != null;
+    }
+
     public Scope getEnclosingScope() { return enclosingScope; }
 
     public String toString() { return getScopeName()+":"+symbols.values().toString(); }

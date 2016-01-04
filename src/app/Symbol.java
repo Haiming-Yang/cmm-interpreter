@@ -27,7 +27,11 @@ public class Symbol {
     public String getName() {
         return this.name;
     }
+
     public Object getValue() { return this.value; }
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
     public Type getType(){
         return type;

@@ -28,7 +28,7 @@ break_stmt : Break LineEnd ;
 read_stmt : Read LBracket (Ident | array) RBracket LineEnd ;
 write_stmt : Write LBracket expr RBracket LineEnd;
 assign_stmt : value Assign expr LineEnd ;
-value : array | Ident | constant;
+value : Ident | array | constant;
 array : Ident LMidBracket IntConstant RMidBracket ;
 constant : IntConstant | RealConstant ;
 expr : expr MulDivMod expr #MulDivExpr | //乘除，取模运算

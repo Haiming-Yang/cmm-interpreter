@@ -10,6 +10,14 @@ import org.antlr.v4.runtime.Token;
  */
 public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
 
+    Scope currentScope;
+    private IOInterface io;
+
+    public ExprComputeVisitor(Scope currentScope, IOInterface io) {
+        this.currentScope = currentScope;
+        this.io = io;
+    }
+
     @Override
     public ExprReturnVal visitMulDivExpr(CmmParser.MulDivExprContext ctx) {
         Token op = ctx.MulDivMod().getSymbol(); // 操作符
@@ -17,15 +25,12 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
         ExprReturnVal rightValue = visit(ctx.expr(1)); // 右值
         // 运算时做类型检查
         if(leftValue.getType() != rightValue.getType()){
-            // TODO 向UI输出错误信息，类型不匹配
-            if(Constant.DEBUG){
-                System.out.println("ERROR: unmatched type on two side of <"
-                        + op.getText()
-                        + "> in line "
-                        + op.getLine()
-                        +":"
-                        + op.getCharPositionInLine());
-            }
+            io.output("ERROR: unmatched type on two side of <"
+                    + op.getText()
+                    + "> in line "
+                    + op.getLine()
+                    +":"
+                    + op.getCharPositionInLine());
             return null;
         }
         ExprReturnVal returnVal = new ExprReturnVal();
@@ -40,14 +45,11 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
         }else if(op.getText().equals("/")){ // 除法
             if(leftValue.getType() == Type.tInt){ // 整数除法
                 if((Integer)rightValue.getValue() == 0){
-                    // TODO 向UI输出错误信息，除0错误
-                    if(Constant.DEBUG){
-                        System.out.println("ERROR: divide zero"
-                                + " in line "
-                                + op.getLine()
-                                +":"
-                                + op.getCharPositionInLine());
-                    }
+                    io.output("ERROR: divide zero"
+                            + " in line "
+                            + op.getLine()
+                            +":"
+                            + op.getCharPositionInLine());
                     return null;
                 }
                 returnVal.setType(Type.tInt);
@@ -59,14 +61,11 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
         }else if(op.getText().equals("%")){
             if(leftValue.getType() == Type.tInt){ // 整数取模
                 if((Integer)rightValue.getValue() == 0){
-                    // TODO 向UI输出错误信息，除0错误
-                    if(Constant.DEBUG){
-                        System.out.println("ERROR: divide zero"
-                                + " in line "
-                                + op.getLine()
-                                +":"
-                                + op.getCharPositionInLine());
-                    }
+                    io.output("ERROR: divide zero"
+                            + " in line "
+                            + op.getLine()
+                            +":"
+                            + op.getCharPositionInLine());
                     return null;
                 }
                 returnVal.setType(Type.tInt);
@@ -88,15 +87,12 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
         ExprReturnVal rightValue = visit(ctx.expr(1)); // 右值
         // 运算时做类型检查
         if(leftValue.getType() != rightValue.getType()){
-            // TODO 向UI输出错误信息，类型不匹配
-            if(Constant.DEBUG){
-                System.out.println("ERROR: unmatched type on two side of <"
-                        + op.getText()
-                        + "> in line "
-                        + op.getLine()
-                        +":"
-                        + op.getCharPositionInLine());
-            }
+            io.output("ERROR: unmatched type on two side of <"
+                    + op.getText()
+                    + "> in line "
+                    + op.getLine()
+                    +":"
+                    + op.getCharPositionInLine());
             return null;
         }
         ExprReturnVal returnVal = new ExprReturnVal();
@@ -128,15 +124,12 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
         ExprReturnVal rightValue = visit(ctx.expr(1)); // 右值
         // 运算时做类型检查
         if(leftValue.getType() != rightValue.getType()){
-            // TODO 向UI输出错误信息，类型不匹配
-            if(Constant.DEBUG){
-                System.out.println("ERROR: unmatched type on two side of <"
-                        + op.getText()
-                        + "> in line "
-                        + op.getLine()
-                        +":"
-                        + op.getCharPositionInLine());
-            }
+            io.output("ERROR: unmatched type on two side of <"
+                    + op.getText()
+                    + "> in line "
+                    + op.getLine()
+                    +":"
+                    + op.getCharPositionInLine());
             return null;
         }
         ExprReturnVal returnVal = new ExprReturnVal();
@@ -188,8 +181,67 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
                 return new ExprReturnVal(Type.tReal,
                         Double.valueOf(ctx.value().constant().RealConstant().getText()));
             }
-        }else{ // TODO: 表达式里包含变量的情况
-            return null;
+        }else if(ctx.value().Ident() != null){ // 表达式里包含变量
+            Token varToken = ctx.value().Ident().getSymbol();
+            String name = varToken.getText();
+            Symbol varSymbol = currentScope.resolve(name);
+            if(varSymbol != null ){
+                return new ExprReturnVal(varSymbol.getType(), varSymbol.getValue());
+            }else{
+                io.output("ERROR: no such variable <"
+                        + name
+                        + "> in line "
+                        + varToken.getLine()
+                        + ":" + varToken.getCharPositionInLine());
+                return null;
+            }
+        }else{ // 表达式里面包含数组
+            Token varToken = ctx.value().array().Ident().getSymbol();
+            String name = varToken.getText();
+            int varIndex = Integer.parseInt(ctx.value().array().IntConstant().getText());
+            Symbol varSymbol = currentScope.resolve(name);
+            if(varSymbol != null ){
+                if(varSymbol.getType() == Type.tIntArray){ // int数组
+
+                    int[] varArray = (int[]) varSymbol.getValue();
+
+                    // 数组越界检查
+                    if(varIndex < varArray.length){
+                        return new ExprReturnVal(Type.tInt, varArray[varIndex]);
+                    }else{
+                        io.output("ERROR: index out of boundary of array <"
+                                + name
+                                + "> in line "
+                                + varToken.getLine()
+                                + ":" + varToken.getCharPositionInLine());
+                        return null;
+                    }
+
+                }else{ // double数组
+
+                    double[] varArray = (double[]) varSymbol.getValue();
+
+                    // 数组越界检查
+                    if(varIndex < varArray.length){
+                        return new ExprReturnVal(Type.tReal, varArray[varIndex]);
+                    }else{
+                        io.output("ERROR: index out of boundary of array <"
+                                + name
+                                + "> in line "
+                                + varToken.getLine()
+                                + ":" + varToken.getCharPositionInLine());
+                        return null;
+                    }
+
+                }
+            }else{
+                io.output("ERROR: no such variable <"
+                        + name
+                        + "> in line "
+                        + varToken.getLine()
+                        + ":" + varToken.getCharPositionInLine());
+                return null;
+            }
         }
 
     }

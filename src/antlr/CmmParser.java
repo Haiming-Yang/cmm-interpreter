@@ -1016,10 +1016,10 @@ public class CmmParser extends Parser {
 	}
 
 	public static class ValueContext extends ParserRuleContext {
+		public TerminalNode Ident() { return getToken(CmmParser.Ident, 0); }
 		public ArrayContext array() {
 			return getRuleContext(ArrayContext.class,0);
 		}
-		public TerminalNode Ident() { return getToken(CmmParser.Ident, 0); }
 		public ConstantContext constant() {
 			return getRuleContext(ConstantContext.class,0);
 		}
@@ -1052,14 +1052,14 @@ public class CmmParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(129);
-				array();
+				match(Ident);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(130);
-				match(Ident);
+				array();
 				}
 				break;
 			case 3:
@@ -1501,7 +1501,7 @@ public class CmmParser extends Parser {
 		"tu\3\2\2\2uv\7\23\2\2vw\7\31\2\2w\27\3\2\2\2xy\7\7\2\2yz\7\22\2\2z{\5"+
 		"\"\22\2{|\7\23\2\2|}\7\31\2\2}\31\3\2\2\2~\177\5\34\17\2\177\u0080\7\30"+
 		"\2\2\u0080\u0081\5\"\22\2\u0081\u0082\7\31\2\2\u0082\33\3\2\2\2\u0083"+
-		"\u0087\5\36\20\2\u0084\u0087\7\13\2\2\u0085\u0087\5 \21\2\u0086\u0083"+
+		"\u0087\7\13\2\2\u0084\u0087\5\36\20\2\u0085\u0087\5 \21\2\u0086\u0083"+
 		"\3\2\2\2\u0086\u0084\3\2\2\2\u0086\u0085\3\2\2\2\u0087\35\3\2\2\2\u0088"+
 		"\u0089\7\13\2\2\u0089\u008a\7\26\2\2\u008a\u008b\7\f\2\2\u008b\u008c\7"+
 		"\27\2\2\u008c\37\3\2\2\2\u008d\u008e\t\3\2\2\u008e!\3\2\2\2\u008f\u0090"+

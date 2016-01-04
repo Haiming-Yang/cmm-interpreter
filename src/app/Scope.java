@@ -14,6 +14,9 @@ public interface Scope {
     /** Define a symbol in the current scope */
     void define(Symbol sym);
 
+    /** Determine redundant definition in same scope */
+    boolean redundant(String name);
+
     /** Look up name in this scope or in enclosing scope if not here */
     Symbol resolve(String name);
 
