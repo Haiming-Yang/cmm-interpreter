@@ -158,6 +158,8 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
             }else {
                 returnVal.setValue((Double)leftValue.getValue() <= (Double) rightValue.getValue());
             }
+        }else if(op.getText().equals("==")){
+            returnVal.setValue(leftValue.getValue() == rightValue.getValue());
         }else if(op.getText().equals("!=") || op.getText().equals("<>")){
             returnVal.setValue(leftValue.getValue() != rightValue.getValue());
         }

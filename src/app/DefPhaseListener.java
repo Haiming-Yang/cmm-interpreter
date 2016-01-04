@@ -85,7 +85,7 @@ public class DefPhaseListener extends CmmBaseListener {
                 if(typeStr.equals("int")){
                     currentScope.define(new Symbol(name, Type.tIntArray, new int[size]));
                 }else{
-                    currentScope.define(new Symbol(name, Type.tIntArray, new double[size]));
+                    currentScope.define(new Symbol(name, Type.tRealArray, new double[size]));
                 }
             }
 

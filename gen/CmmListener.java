@@ -77,15 +77,77 @@ public interface CmmListener extends ParseTreeListener {
 	 */
 	void exitDecl_assign(CmmParser.Decl_assignContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CmmParser#if_stmt}.
+	 * Enter a parse tree produced by the {@code I_S}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
 	 * @param ctx the parse tree
 	 */
-	void enterIf_stmt(CmmParser.If_stmtContext ctx);
+	void enterI_S(CmmParser.I_SContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CmmParser#if_stmt}.
+	 * Exit a parse tree produced by the {@code I_S}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
 	 * @param ctx the parse tree
 	 */
-	void exitIf_stmt(CmmParser.If_stmtContext ctx);
+	void exitI_S(CmmParser.I_SContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code I_SB}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterI_SB(CmmParser.I_SBContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code I_SB}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitI_SB(CmmParser.I_SBContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code I_S_E_S}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterI_S_E_S(CmmParser.I_S_E_SContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code I_S_E_S}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitI_S_E_S(CmmParser.I_S_E_SContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code I_S_E_SB}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterI_S_E_SB(CmmParser.I_S_E_SBContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code I_S_E_SB}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitI_S_E_SB(CmmParser.I_S_E_SBContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code I_SB_E_S}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterI_SB_E_S(CmmParser.I_SB_E_SContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code I_SB_E_S}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitI_SB_E_S(CmmParser.I_SB_E_SContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code I_SB_E_SB}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterI_SB_E_SB(CmmParser.I_SB_E_SBContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code I_SB_E_SB}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitI_SB_E_SB(CmmParser.I_SB_E_SBContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CmmParser#while_stmt}.
 	 * @param ctx the parse tree

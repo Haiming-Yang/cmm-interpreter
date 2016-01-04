@@ -52,11 +52,47 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDecl_assign(CmmParser.Decl_assignContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CmmParser#if_stmt}.
+	 * Visit a parse tree produced by the {@code I_S}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIf_stmt(CmmParser.If_stmtContext ctx);
+	T visitI_S(CmmParser.I_SContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code I_SB}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitI_SB(CmmParser.I_SBContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code I_S_E_S}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitI_S_E_S(CmmParser.I_S_E_SContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code I_S_E_SB}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitI_S_E_SB(CmmParser.I_S_E_SBContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code I_SB_E_S}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitI_SB_E_S(CmmParser.I_SB_E_SContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code I_SB_E_SB}
+	 * labeled alternative in {@link CmmParser#if_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitI_SB_E_SB(CmmParser.I_SB_E_SBContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CmmParser#while_stmt}.
 	 * @param ctx the parse tree

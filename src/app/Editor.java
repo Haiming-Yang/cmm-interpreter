@@ -140,7 +140,7 @@ public class Editor extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			Compiler compiler = new Compiler(textPane.getText(), new EditorIO(consoleArea));
+			Compiler compiler = new Compiler(textPane.getText(), new ConsoleIO());
             compiler.setShowLexerResult(isShowLex.getState());
             compiler.setShowAST(isShowTree.getState());
             compiler.run();

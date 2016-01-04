@@ -22,7 +22,13 @@ var_decl : type varlist LineEnd ;    //变量申明
 type : Int | Real ; //类型
 varlist : (Ident | decl_assign | array)(Comma (Ident | decl_assign | array))* ; // 变量列表
 decl_assign : Ident Assign expr ; //声明同时赋值
-if_stmt : If LBracket expr RBracket (stmt | stmt_block) (Else (stmt | stmt_block))? ;
+//if_stmt : If LBracket expr RBracket (stmt | stmt_block) (Else (stmt | stmt_block))? ;
+if_stmt : If LBracket expr RBracket stmt #I_S | // 拆开好实现一点
+            If LBracket expr RBracket stmt_block #I_SB |
+            If LBracket expr RBracket stmt Else stmt #I_S_E_S|
+            If LBracket expr RBracket stmt Else stmt_block #I_S_E_SB|
+            If LBracket expr RBracket stmt_block Else stmt #I_SB_E_S|
+            If LBracket expr RBracket stmt_block Else stmt_block #I_SB_E_SB;
 while_stmt : While LBracket expr RBracket (stmt | stmt_block) ;
 break_stmt : Break LineEnd ;
 read_stmt : Read LBracket (Ident | array) RBracket LineEnd ;

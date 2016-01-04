@@ -33,19 +33,19 @@ public class Compiler {
 
         try{
 
-            io.output("====== compiler starting... ======\n");
+            io.output("====== compiler starting... ======");
 
             CmmLexer lexer = new CmmLexer(new ANTLRInputStream(source));
 
             // ===================== 词法分析 =======================
             if(showLexerResult){
-                io.output("====== lexer analysis result: ======\n");
-                io.output("Token\tLine\tType\n");
+                io.output("====== lexer analysis result: ======");
+                io.output("Token\tLine\tType");
                 List<CmmToken> tokenList = (List<CmmToken>) lexer.getAllTokens();
                 for(Token token : tokenList){
 
                     io.output(token.getText() + "\t" + token.getLine()
-                            + "\t" + TokenDictionary.getTokenType(token.getType()) + "\n");
+                            + "\t" + TokenDictionary.getTokenType(token.getType()));
 
                 }
                 lexer.reset();
@@ -56,7 +56,7 @@ public class Compiler {
             CmmParser parser = new CmmParser(tokenStream);
             ParseTree parseTree = parser.program();
             if(showAST){
-                io.output("====== show tree ======\n");
+                io.output("====== show tree ======");
                 Trees.inspect(parseTree, parser);
             }
             ParseTreeWalker walker = new ParseTreeWalker();
@@ -69,11 +69,17 @@ public class Compiler {
             DefPhaseListener defPhaseListener = new DefPhaseListener(io);
             walker.walk(defPhaseListener, parseTree);
 
-            // 引用阶段，变量作用域检查
-            RefPhaseListener refPhaseListener = new RefPhaseListener(defPhaseListener.globals,
+//            // 引用阶段，变量作用域检查
+//            RefPhaseListener refPhaseListener = new RefPhaseListener(defPhaseListener.globals,
+//                    defPhaseListener.scopes,
+//                    io);
+//            walker.walk(refPhaseListener, parseTree);
+
+            // 引用计算阶段改为visitor的方式
+            ControlVisitor controlVisitor = new ControlVisitor(defPhaseListener.globals,
                     defPhaseListener.scopes,
                     io);
-            walker.walk(refPhaseListener, parseTree);
+            controlVisitor.visit(parseTree);
 
         }catch (Exception e){
             io.output(e.getMessage());
