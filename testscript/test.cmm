@@ -1,0 +1,6 @@
+int a = 'h';
+int b = 1;
+b = 'h';
+if (b) {
+    write(b);
+}
