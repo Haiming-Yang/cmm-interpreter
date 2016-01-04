@@ -39,30 +39,6 @@ public class ReferPhase extends CmmBaseListener {
         currentScope = currentScope.getEnclosingScope();
     }
 
-    @Override
-    public void enterIf_stmt(CmmParser.If_stmtContext ctx) {
-        super.enterIf_stmt(ctx);
-        currentScope = scopes.get(ctx);
-    }
-
-    @Override
-    public void exitIf_stmt(CmmParser.If_stmtContext ctx) {
-        super.exitIf_stmt(ctx);
-        currentScope = currentScope.getEnclosingScope();
-    }
-
-    @Override
-    public void enterWhile_stmt(CmmParser.While_stmtContext ctx) {
-        super.enterWhile_stmt(ctx);
-        currentScope = scopes.get(ctx);
-    }
-
-    @Override
-    public void exitWhile_stmt(CmmParser.While_stmtContext ctx) {
-        super.exitWhile_stmt(ctx);
-        currentScope = currentScope.getEnclosingScope();
-    }
-
     // 执行到下面的语句时，需要判断变量是否已定义
     @Override
     public void exitRead_stmt(CmmParser.Read_stmtContext ctx) {
@@ -79,7 +55,7 @@ public class ReferPhase extends CmmBaseListener {
             // TODO 将信息输出到UI
             System.out.println("ERROR: no such variable <"
                     + varName
-                    + "> in line"
+                    + "> in line "
                     + token.getLine()
                     + ":" + token.getCharPositionInLine());
         }
@@ -100,69 +76,18 @@ public class ReferPhase extends CmmBaseListener {
             // TODO 将信息输出到UI
             System.out.println("ERROR: no such variable <"
                     + varName
-                    + "> in line"
+                    + "> in line "
                     + token.getLine()
                     + ":" + token.getCharPositionInLine());
         }
     }
 
-    @Override
-    public void exitParenthesesExpr(CmmParser.ParenthesesExprContext ctx) {
-        super.exitParenthesesExpr(ctx);
-    }
+    // 输出变量或表达式
+
 
     @Override
-    public void enterParenthesesExpr(CmmParser.ParenthesesExprContext ctx) {
-        super.enterParenthesesExpr(ctx);
-    }
-
-    @Override
-    public void exitCompareExpr(CmmParser.CompareExprContext ctx) {
-        super.exitCompareExpr(ctx);
-    }
-
-    @Override
-    public void enterCompareExpr(CmmParser.CompareExprContext ctx) {
-        super.enterCompareExpr(ctx);
-    }
-
-    @Override
-    public void exitAddMinExpr(CmmParser.AddMinExprContext ctx) {
-        super.exitAddMinExpr(ctx);
-    }
-
-    @Override
-    public void enterAddMinExpr(CmmParser.AddMinExprContext ctx) {
-        super.enterAddMinExpr(ctx);
-    }
-
-    @Override
-    public void exitMulDivExpr(CmmParser.MulDivExprContext ctx) {
-        super.exitMulDivExpr(ctx);
-    }
-
-    @Override
-    public void enterMulDivExpr(CmmParser.MulDivExprContext ctx) {
-        super.enterMulDivExpr(ctx);
-    }
-
-    @Override
-    public void exitValueExpr(CmmParser.ValueExprContext ctx) {
-        super.exitValueExpr(ctx);
-    }
-
-    @Override
-    public void enterValueExpr(CmmParser.ValueExprContext ctx) {
-        super.enterValueExpr(ctx);
-    }
-
-    @Override
-    public void exitSignExpr(CmmParser.SignExprContext ctx) {
-        super.exitSignExpr(ctx);
-    }
-
-    @Override
-    public void enterSignExpr(CmmParser.SignExprContext ctx) {
-        super.enterSignExpr(ctx);
+    public void enterWrite_stmt(CmmParser.Write_stmtContext ctx) {
+        ExprComputeVisitor exprComputeVisitor = new ExprComputeVisitor();
+        System.out.println(exprComputeVisitor.visit(ctx.expr()).getValue());
     }
 }

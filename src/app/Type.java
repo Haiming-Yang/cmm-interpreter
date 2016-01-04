@@ -8,5 +8,6 @@ public enum Type {
     tInt,
     tReal,
     tIntArray,
-    tRealArray
+    tRealArray,
+    tBool
 }

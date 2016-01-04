@@ -101,30 +101,4 @@ public class DefinePhase extends CmmBaseListener {
 
     }
 
-    @Override
-    public void enterIf_stmt(CmmParser.If_stmtContext ctx) {
-        super.enterIf_stmt(ctx);
-        currentScope = new LocalScope(currentScope);
-        saveScope(ctx, currentScope);
-    }
-
-    @Override
-    public void exitIf_stmt(CmmParser.If_stmtContext ctx) {
-        super.exitIf_stmt(ctx);
-        currentScope = currentScope.getEnclosingScope();
-    }
-
-    @Override
-    public void enterWhile_stmt(CmmParser.While_stmtContext ctx) {
-        super.enterWhile_stmt(ctx);
-        currentScope = new LocalScope(currentScope);
-        saveScope(ctx, currentScope);
-    }
-
-    @Override
-    public void exitWhile_stmt(CmmParser.While_stmtContext ctx) {
-        super.exitWhile_stmt(ctx);
-        currentScope = currentScope.getEnclosingScope();
-    }
-
 }
