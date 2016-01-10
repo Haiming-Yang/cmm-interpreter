@@ -1,9 +1,10 @@
-package app;
+package core;
 
 import antlr.CmmBaseListener;
 import antlr.CmmParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -151,6 +152,15 @@ public class DefPhaseListener extends CmmBaseListener {
             }
         }
 
+    }
+
+    @Override
+    public void visitErrorNode(ErrorNode node) {
+        super.visitErrorNode(node);
+        io.output("ERROR: " + node.getText()
+                +" in line " + node.getSymbol().getLine()
+                +":" +node.getSymbol().getCharPositionInLine()
+                +"\n");
     }
 
 }

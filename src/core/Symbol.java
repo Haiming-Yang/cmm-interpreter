@@ -1,4 +1,4 @@
-package app;
+package core;
 
 /**
  * Created by TangfJiong on 2016/1/2.

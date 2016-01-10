@@ -1,5 +1,7 @@
 package app;
 
+import core.Compiler;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;

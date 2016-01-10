@@ -1,4 +1,4 @@
-package app;
+package core;
 
 import antlr.CmmBaseVisitor;
 import antlr.CmmParser;
@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
 /**
  * Created by TangJiong on 2016/1/4.
  */
-public class ControlVisitor extends CmmBaseVisitor<ExprReturnVal> {
+public class RefPhaseVisitor extends CmmBaseVisitor<ExprReturnVal> {
 
     private IOInterface io;
 
@@ -16,7 +16,7 @@ public class ControlVisitor extends CmmBaseVisitor<ExprReturnVal> {
     GlobalScope globals;
     Scope currentScope;
 
-    public ControlVisitor(GlobalScope globals, ParseTreeProperty<Scope> scopes, IOInterface io) {
+    public RefPhaseVisitor(GlobalScope globals, ParseTreeProperty<Scope> scopes, IOInterface io) {
         this.io = io;
         this.globals = globals;
         this.scopes = scopes;

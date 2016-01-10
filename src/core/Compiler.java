@@ -1,4 +1,4 @@
-package app;
+package core;
 
 import antlr.CmmLexer;
 import antlr.CmmParser;
@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
@@ -61,25 +60,15 @@ public class Compiler {
             }
             ParseTreeWalker walker = new ParseTreeWalker();
 
-            // 语法分析阶段，分析语法错误
-            SyntaxPhase syntaxPhase = new SyntaxPhase(io);
-            walker.walk(syntaxPhase, parseTree);
-
-            // 定义阶段，将变量放入符号表
+            // 定义阶段，语法分析，将变量放入符号表
             DefPhaseListener defPhaseListener = new DefPhaseListener(io);
             walker.walk(defPhaseListener, parseTree);
 
-//            // 引用阶段，变量作用域检查
-//            RefPhaseListener refPhaseListener = new RefPhaseListener(defPhaseListener.globals,
-//                    defPhaseListener.scopes,
-//                    io);
-//            walker.walk(refPhaseListener, parseTree);
-
             // 引用计算阶段改为visitor的方式
-            ControlVisitor controlVisitor = new ControlVisitor(defPhaseListener.globals,
+            RefPhaseVisitor refPhaseVisitor = new RefPhaseVisitor(defPhaseListener.globals,
                     defPhaseListener.scopes,
                     io);
-            controlVisitor.visit(parseTree);
+            refPhaseVisitor.visit(parseTree);
 
         }catch (Exception e){
             io.output(e.getMessage());

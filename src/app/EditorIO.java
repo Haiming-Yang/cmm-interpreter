@@ -1,5 +1,7 @@
 package app;
 
+import core.IOInterface;
+
 import javax.swing.*;
 
 /**
