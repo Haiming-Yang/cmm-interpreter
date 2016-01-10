@@ -22,9 +22,8 @@ if(a == 0)
 {
 	write(1);
 }
-else{
+else
 	write(0);
-}
 
 /////////////read赋值
 real r;
@@ -32,16 +31,15 @@ read(r);
 write(r);
 
 //变量传递
-real r2 = 5;
+int r2 = 5;
 int a2 = 3;
 r2 = a2;
 if(r2 == 3)
 {
 	write(1);
 }
-else{
+else
 	write(0);
-}
 
 r2 = a2 ;
 write(r2);

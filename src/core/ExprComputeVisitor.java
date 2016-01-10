@@ -24,56 +24,82 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
         ExprReturnVal leftValue = visit(ctx.expr(0)); // 左值
         ExprReturnVal rightValue = visit(ctx.expr(1)); // 右值
         // 运算时做类型检查
-        if(leftValue.getType() != rightValue.getType()){
-            io.output("ERROR: unmatched type on two side of <"
+        ExprReturnVal returnVal = new ExprReturnVal();
+        if(leftValue.getType() == Type.tReal && rightValue.getType() == Type.tInt){
+            returnVal.setType(Type.tReal);
+            if(op.getText().equals("*")){
+                returnVal.setValue((Double)leftValue.getValue() * (Integer) rightValue.getValue());
+            }else if(op.getText().equals("/")){
+                if((Integer)rightValue.getValue() == 0){
+                    io.output("ERROR: divide zero"
+                            + " in line "
+                            + op.getLine()
+                            +":"
+                            + op.getCharPositionInLine());
+                    return null;
+                }
+                returnVal.setValue((Double)leftValue.getValue() / (Integer) rightValue.getValue());
+            }else if(op.getText().equals("%")){
+                if((Integer)rightValue.getValue() == 0){
+                    io.output("ERROR: divide zero"
+                            + " in line "
+                            + op.getLine()
+                            +":"
+                            + op.getCharPositionInLine());
+                    return null;
+                }
+                returnVal.setValue((Double)leftValue.getValue() % (Integer) rightValue.getValue());
+            }
+        }else if(leftValue.getType() == Type.tInt && rightValue.getType() == Type.tReal){
+            returnVal.setType(Type.tReal);
+            if(op.getText().equals("*")){
+                returnVal.setValue((Integer)leftValue.getValue() * (Double) rightValue.getValue());
+            }else if(op.getText().equals("/")){
+                returnVal.setValue((Integer)leftValue.getValue() / (Double) rightValue.getValue());
+            }else if(op.getText().equals("%")){
+                returnVal.setValue((Integer)leftValue.getValue() % (Double) rightValue.getValue());
+            }
+        }else if(leftValue.getType() == Type.tReal && rightValue.getType() == Type.tReal){
+            returnVal.setType(Type.tReal);
+            if(op.getText().equals("*")){
+                returnVal.setValue((Double)leftValue.getValue() * (Double) rightValue.getValue());
+            }else if(op.getText().equals("/")){
+                returnVal.setValue((Double)leftValue.getValue() / (Double) rightValue.getValue());
+            }else if(op.getText().equals("%")){
+                returnVal.setValue((Double)leftValue.getValue() % (Double) rightValue.getValue());
+            }
+        }else if(leftValue.getType() == Type.tInt && rightValue.getType() == Type.tInt){
+            returnVal.setType(Type.tInt);
+            if(op.getText().equals("*")){
+                returnVal.setValue((Integer)leftValue.getValue() * (Integer) rightValue.getValue());
+            }else if(op.getText().equals("/")){
+                if((Integer)rightValue.getValue() == 0){
+                    io.output("ERROR: divide zero"
+                            + " in line "
+                            + op.getLine()
+                            +":"
+                            + op.getCharPositionInLine());
+                    return null;
+                }
+                returnVal.setValue((Integer)leftValue.getValue() / (Integer) rightValue.getValue());
+            }else if(op.getText().equals("%")){
+                if((Integer)rightValue.getValue() == 0){
+                    io.output("ERROR: divide zero"
+                            + " in line "
+                            + op.getLine()
+                            +":"
+                            + op.getCharPositionInLine());
+                    return null;
+                }
+                returnVal.setValue((Integer)leftValue.getValue() % (Integer) rightValue.getValue());
+            }
+        }else{
+            io.output("ERROR: unmatched or uncast type on two side of <"
                     + op.getText()
                     + "> in line "
                     + op.getLine()
                     +":"
                     + op.getCharPositionInLine());
-            return null;
-        }
-        ExprReturnVal returnVal = new ExprReturnVal();
-        if(op.getText().equals("*")){ // 乘法
-            if(leftValue.getType() == Type.tInt){ // 整数乘法
-                returnVal.setType(Type.tInt);
-                returnVal.setValue((Integer)leftValue.getValue() * (Integer)rightValue.getValue());
-            }else { // 小数乘法
-                returnVal.setType(Type.tInt);
-                returnVal.setValue((Integer)leftValue.getValue() * (Integer)rightValue.getValue());
-            }
-        }else if(op.getText().equals("/")){ // 除法
-            if(leftValue.getType() == Type.tInt){ // 整数除法
-                if((Integer)rightValue.getValue() == 0){
-                    io.output("ERROR: divide zero"
-                            + " in line "
-                            + op.getLine()
-                            +":"
-                            + op.getCharPositionInLine());
-                    return null;
-                }
-                returnVal.setType(Type.tInt);
-                returnVal.setValue((Integer)leftValue.getValue() * (Integer)rightValue.getValue());
-            }else { // 小数除法
-                returnVal.setType(Type.tReal);
-                returnVal.setValue((Double)leftValue.getValue() / (Double) rightValue.getValue());
-            }
-        }else if(op.getText().equals("%")){
-            if(leftValue.getType() == Type.tInt){ // 整数取模
-                if((Integer)rightValue.getValue() == 0){
-                    io.output("ERROR: divide zero"
-                            + " in line "
-                            + op.getLine()
-                            +":"
-                            + op.getCharPositionInLine());
-                    return null;
-                }
-                returnVal.setType(Type.tInt);
-                returnVal.setValue((Integer)leftValue.getValue() % (Integer)rightValue.getValue());
-            }else { // 小数取模
-                returnVal.setType(Type.tReal);
-                returnVal.setValue((Double)leftValue.getValue() % (Double) rightValue.getValue());
-            }
         }
 
         return returnVal;
@@ -85,35 +111,44 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
         Token op = ctx.AddMin().getSymbol(); // 操作符
         ExprReturnVal leftValue = visit(ctx.expr(0)); // 左值
         ExprReturnVal rightValue = visit(ctx.expr(1)); // 右值
+        ExprReturnVal returnVal = new ExprReturnVal();
         // 运算时做类型检查
-        if(leftValue.getType() != rightValue.getType()){
-            io.output("ERROR: unmatched type on two side of <"
+        if(leftValue.getType() == Type.tReal && rightValue.getType() == Type.tInt){
+            returnVal.setType(Type.tReal);
+            if(op.getText().equals("+")){
+                returnVal.setValue((Double)leftValue.getValue() + (Integer) rightValue.getValue());
+            }else{
+                returnVal.setValue((Double)leftValue.getValue() - (Integer) rightValue.getValue());
+            }
+        }else if(leftValue.getType() == Type.tInt && rightValue.getType() == Type.tReal){
+            returnVal.setType(Type.tReal);
+            if(op.getText().equals("+")){
+                returnVal.setValue((Integer)leftValue.getValue() + (Double) rightValue.getValue());
+            }else{
+                returnVal.setValue((Integer)leftValue.getValue() - (Double) rightValue.getValue());
+            }
+        }else if(leftValue.getType() == Type.tReal && rightValue.getType() == Type.tReal){
+            returnVal.setType(Type.tReal);
+            if(op.getText().equals("+")){
+                returnVal.setValue((Double)leftValue.getValue() + (Double) rightValue.getValue());
+            }else{
+                returnVal.setValue((Double)leftValue.getValue() - (Double) rightValue.getValue());
+            }
+        }else if(leftValue.getType() == Type.tInt && rightValue.getType() == Type.tInt){
+            returnVal.setType(Type.tInt);
+            if(op.getText().equals("+")){
+                returnVal.setValue((Integer)leftValue.getValue() + (Integer)rightValue.getValue());
+            }else{
+                returnVal.setValue((Integer)leftValue.getValue() - (Integer)rightValue.getValue());
+            }
+        }else{
+            io.output("ERROR: unmatched or uncast type on two side of <"
                     + op.getText()
                     + "> in line "
                     + op.getLine()
                     +":"
                     + op.getCharPositionInLine());
-            return null;
         }
-        ExprReturnVal returnVal = new ExprReturnVal();
-        if(op.getText().equals("+")){ // 加法
-            if(leftValue.getType() == Type.tInt){ // 整数
-                returnVal.setType(Type.tInt);
-                returnVal.setValue((Integer)leftValue.getValue() + (Integer)rightValue.getValue());
-            }else { // 小数
-                returnVal.setType(Type.tInt);
-                returnVal.setValue((Integer)leftValue.getValue() + (Integer)rightValue.getValue());
-            }
-        }else if(op.getText().equals("-")){ // 减法
-            if(leftValue.getType() == Type.tInt){ // 整数
-                returnVal.setType(Type.tInt);
-                returnVal.setValue((Integer)leftValue.getValue() - (Integer)rightValue.getValue());
-            }else { // 小数
-                returnVal.setType(Type.tReal);
-                returnVal.setValue((Double)leftValue.getValue() - (Double) rightValue.getValue());
-            }
-        }
-
         return returnVal;
     }
 
@@ -200,7 +235,14 @@ public class ExprComputeVisitor extends CmmBaseVisitor<ExprReturnVal> {
         }else{ // 表达式里面包含数组
             Token varToken = ctx.value().array().Ident().getSymbol();
             String name = varToken.getText();
-            int varIndex = Integer.parseInt(ctx.value().array().IntConstant().getText());
+            int varIndex;
+            if(ctx.value().array().IntConstant() != null){ // 索引为int常量
+                varIndex = Integer.parseInt(ctx.value().array().IntConstant().getText());
+            }else{ // 索引为表达式
+                ExprComputeVisitor indexComputeVisitor = new ExprComputeVisitor(currentScope, io);
+                ExprReturnVal indexValue = indexComputeVisitor.visit(ctx.value().array().expr());
+                varIndex = (Integer) indexValue.getValue();
+            }
             Symbol varSymbol = currentScope.resolve(name);
             if(varSymbol != null ){
                 if(varSymbol.getType() == Type.tIntArray){ // int数组

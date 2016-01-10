@@ -46,6 +46,7 @@ public class LineNumberBorder extends AbstractBorder {
     // 此方法必须实现
     public void paintBorder(Component c, Graphics g, int x, int y, int width,
                             int height) {
+
         // 获得当前剪贴区域的边界矩形。
         java.awt.Rectangle clip = g.getClipBounds();
         FontMetrics fm = g.getFontMetrics();
@@ -70,7 +71,7 @@ public class LineNumberBorder extends AbstractBorder {
         if (yend > (y + height)) {
             yend = y + height;
         }
-        g.setColor(Color.blue);
+        g.setColor(Color.DARK_GRAY);
         // 绘制行号
         while (ybaseline < yend) {
             String label = padLabel(startingLineNumber, 0, true);

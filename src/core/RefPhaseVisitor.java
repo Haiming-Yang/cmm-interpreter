@@ -40,35 +40,119 @@ public class RefPhaseVisitor extends CmmBaseVisitor<ExprReturnVal> {
     @Override
     public ExprReturnVal visitAssign_stmt(CmmParser.Assign_stmtContext ctx) {
         super.visitAssign_stmt(ctx);
-        Token token = null;
-        if(ctx.value().Ident() == null){
-            token = ctx.value().array().Ident().getSymbol();
-        }else{
-            token = ctx.value().Ident().getSymbol();
-        }
-        String varName = token.getText();
-        Symbol var = currentScope.resolve(varName);
-        if(var == null){
-            io.output("ERROR: no such variable <"
-                    + varName
-                    + "> in line "
-                    + token.getLine()
-                    + ":" + token.getCharPositionInLine());
-        }else{ // 变量存在
-            Token assign = ctx.Assign().getSymbol();
-            ExprComputeVisitor exprComputeVisitor = new ExprComputeVisitor(currentScope, io);
-            ExprReturnVal value = exprComputeVisitor.visit(ctx.expr());
-            if(var.getType() != value.getType()){
-                io.output("ERROR: unmatched type on two side of <"
-                        + assign.getText()
+
+        if(ctx.value().Ident() == null){ // 数组
+            Token token = ctx.value().array().Ident().getSymbol();
+            String varName = token.getText();
+            Symbol var = currentScope.resolve(varName);
+            if(var == null){
+                io.output("ERROR: no such variable <"
+                        + varName
                         + "> in line "
-                        + assign.getLine()
-                        +":"
-                        + assign.getCharPositionInLine());
-            }else{ // 新值覆盖旧值
-                var.setValue(value.getValue());
+                        + token.getLine()
+                        + ":" + token.getCharPositionInLine());
+                return null;
+            }else{
+                ExprComputeVisitor exprComputeVisitor = new ExprComputeVisitor(currentScope, io);
+                ExprReturnVal value = exprComputeVisitor.visit(ctx.expr()); // 右边表达式计算得到的值
+                int varIndex;
+                if(ctx.value().array().IntConstant() != null){ // 索引为int常量
+                    varIndex = Integer.parseInt(ctx.value().array().IntConstant().getText());
+                }else{ // 索引为表达式
+                    ExprComputeVisitor indexComputeVisitor = new ExprComputeVisitor(currentScope, io);
+                    ExprReturnVal indexValue = indexComputeVisitor.visit(ctx.value().array().expr());
+                    if(indexValue.getType() != Type.tInt){
+                        io.output("ERROR: invalid index for <"
+                                + varName
+                                + "> in line "
+                                + token.getLine()
+                                + ":" + token.getCharPositionInLine());
+                        return null;
+                    }
+                    varIndex = (Integer) indexValue.getValue();
+                }
+                if(var.getType() == Type.tIntArray){ // int数组
+                    int[] varArray = (int[]) var.getValue();
+                    // 数组越界检查
+                    if(0 <= varIndex && varIndex < varArray.length){
+                        if(value.getValue() instanceof  Integer){
+                            varArray[varIndex] = (Integer) value.getValue();
+                        }else{
+                            io.output("ERROR: unmatched or uncast type during assignment of <"
+                                    + varName
+                                    + "> in line "
+                                    + token.getLine()
+                                    +":"
+                                    + token.getCharPositionInLine());
+                            return null;
+                        }
+                    }else{
+                        io.output("ERROR: index out of boundary of array <"
+                                + varName
+                                + "> in line "
+                                + token.getLine()
+                                + ":" + token.getCharPositionInLine());
+                        return null;
+                    }
+
+                }else{ // double数组
+                    double[] varArray = (double[]) var.getValue();
+                    // 数组越界检查
+                    if(0 <= varIndex && varIndex < varArray.length){
+                        if(value.getValue() instanceof  Double){
+                            varArray[varIndex] = (Double) value.getValue();
+                        }else if(value.getValue() instanceof  Integer){
+                            varArray[varIndex] = (Integer) value.getValue();
+                        }else{
+                            io.output("ERROR: unmatched or uncast type during assignment of <"
+                                    + varName
+                                    + "> in line "
+                                    + token.getLine()
+                                    +":"
+                                    + token.getCharPositionInLine());
+                            return null;
+                        }
+                    }else{
+                        io.output("ERROR: index out of boundary of array <"
+                                + varName
+                                + "> in line "
+                                + token.getLine()
+                                + ":" + token.getCharPositionInLine());
+                        return null;
+                    }
+
+                }
+            }
+        }else{ // 普通变量
+            Token token = ctx.value().Ident().getSymbol();
+            String varName = token.getText();
+            Symbol var = currentScope.resolve(varName);
+            if(var == null){
+                io.output("ERROR: no such variable <"
+                        + varName
+                        + "> in line "
+                        + token.getLine()
+                        + ":" + token.getCharPositionInLine());
+                return null;
+            }else{ // 变量存在
+                ExprComputeVisitor exprComputeVisitor = new ExprComputeVisitor(currentScope, io);
+                ExprReturnVal value = exprComputeVisitor.visit(ctx.expr());
+
+                if(var.getType() != value.getType()){
+                    Token assign = ctx.Assign().getSymbol(); // 找到等号方便定位错误
+                    io.output("ERROR: unmatched type on two side of <"
+                            + assign.getText()
+                            + "> in line "
+                            + assign.getLine()
+                            +":"
+                            + assign.getCharPositionInLine());
+                    return null;
+                }else{ // 新值覆盖旧值
+                    var.setValue(value.getValue());
+                }
             }
         }
+
         return null;
     }
 
@@ -94,7 +178,7 @@ public class RefPhaseVisitor extends CmmBaseVisitor<ExprReturnVal> {
                 int[] varArray = (int[]) var.getValue();
 
                 // 数组越界检查
-                if(varIndex < varArray.length){
+                if(0 <= varIndex && varIndex < varArray.length){
                     int in = Integer.parseInt(io.input());
                     varArray[varIndex] = in;
                 }else{
@@ -110,7 +194,7 @@ public class RefPhaseVisitor extends CmmBaseVisitor<ExprReturnVal> {
                 double[] varArray = (double[]) var.getValue();
 
                 // 数组越界检查
-                if(varIndex < varArray.length){
+                if(0 <= varIndex && varIndex < varArray.length){
                     Double in = Double.parseDouble(io.input());
                     varArray[varIndex] = in;
                 }else{

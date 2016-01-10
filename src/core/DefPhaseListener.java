@@ -159,8 +159,7 @@ public class DefPhaseListener extends CmmBaseListener {
         super.visitErrorNode(node);
         io.output("ERROR: " + node.getText()
                 +" in line " + node.getSymbol().getLine()
-                +":" +node.getSymbol().getCharPositionInLine()
-                +"\n");
+                +":" +node.getSymbol().getCharPositionInLine());
     }
 
 }

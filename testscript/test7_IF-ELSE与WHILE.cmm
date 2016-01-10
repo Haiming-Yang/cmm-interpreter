@@ -15,18 +15,16 @@ while(a <> 0)
 	int j = a;
 	while(j <> 0)
 	{
-		if(j/2 <> 1){
+		if(j/2 <> 1)
 			write(j);
-		}
 		j = j-1;	
 	}
 	if( a < 2)
 	{
 		write(a);
 	}
-	else{
+	else
 		write(a+3);
-	}
 	a = a -1;
 }
 /*output:

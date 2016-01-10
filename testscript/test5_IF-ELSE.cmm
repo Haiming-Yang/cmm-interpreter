@@ -28,16 +28,12 @@ else
 
 //if Ç¶Ì×
 int aa = 3;
-if(aa < 4){
-	if(2 < aa){
-		if(aa <> 3){
+if(aa < 4)
+	if(2 < aa)
+		if(aa <> 3)
 			write(aa);
-    }
-		else{
+		else
 			write(aa-2);
-    }
-  }
-}
 
 
 /*output:

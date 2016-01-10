@@ -21,29 +21,31 @@ public class Compiler {
     private boolean showLexerResult = true;
     private boolean showAST = true;
     private String source;
-    private IOInterface io;
+    private IOInterface lexIo;
+    private IOInterface consoleIo;
 
-    public Compiler(String source, IOInterface io){
+    public Compiler(String source, IOInterface lexIo, IOInterface consoleIo){
         this.source = source;
-        this.io = io;
+        this.lexIo = lexIo;
+        this.consoleIo = consoleIo;
     }
 
     public void run(){
 
         try{
 
-            io.output("====== compiler starting... ======");
+            consoleIo.output("====== compiler starting... ======");
 
             CmmLexer lexer = new CmmLexer(new ANTLRInputStream(source));
 
             // ===================== 词法分析 =======================
             if(showLexerResult){
-                io.output("====== lexer analysis result: ======");
-                io.output("Token\tLine\tType");
+                lexIo.output("====== lexer analysis result: ======");
+                lexIo.output("Token\tLine\tType");
                 List<CmmToken> tokenList = (List<CmmToken>) lexer.getAllTokens();
                 for(Token token : tokenList){
 
-                    io.output(token.getText() + "\t" + token.getLine()
+                    lexIo.output(token.getText() + "\t" + token.getLine()
                             + "\t" + TokenDictionary.getTokenType(token.getType()));
 
                 }
@@ -55,23 +57,23 @@ public class Compiler {
             CmmParser parser = new CmmParser(tokenStream);
             ParseTree parseTree = parser.program();
             if(showAST){
-                io.output("====== show tree ======");
+                consoleIo.output("====== show tree ======");
                 Trees.inspect(parseTree, parser);
             }
             ParseTreeWalker walker = new ParseTreeWalker();
 
             // 定义阶段，语法分析，将变量放入符号表
-            DefPhaseListener defPhaseListener = new DefPhaseListener(io);
+            DefPhaseListener defPhaseListener = new DefPhaseListener(consoleIo);
             walker.walk(defPhaseListener, parseTree);
 
             // 引用计算阶段改为visitor的方式
             RefPhaseVisitor refPhaseVisitor = new RefPhaseVisitor(defPhaseListener.globals,
                     defPhaseListener.scopes,
-                    io);
+                    consoleIo);
             refPhaseVisitor.visit(parseTree);
 
         }catch (Exception e){
-            io.output(e.getMessage());
+            consoleIo.output(e.getMessage());
             if(Constant.DEBUG){
                 e.printStackTrace();
             }

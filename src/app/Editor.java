@@ -16,6 +16,7 @@ public class Editor extends JFrame {
 	HighlightJPane textPane = new HighlightJPane();
 	JLabel fileNameLable= new JLabel("newfile");
 	JTextArea consoleArea = new JTextArea();
+    JTextArea lexArea = new JTextArea();
 	JFileChooser filechooser = new JFileChooser();
     Checkbox isShowLex = new Checkbox("show lexcial result",true);
     Checkbox isShowTree = new Checkbox("show parse tree",false);
@@ -40,8 +41,9 @@ public class Editor extends JFrame {
 		container.add(createJToolBar(actions),BorderLayout.NORTH);
 
 		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(2,1,0,10));
+		mainPanel.setLayout(new GridLayout(2,1,0,0));
 
+        // 输入面板
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new BorderLayout());
 		inputPanel.add(fileNameLable, BorderLayout.NORTH);
@@ -50,28 +52,54 @@ public class Editor extends JFrame {
 		JScrollPane textScrollPane = new JScrollPane(textPane);
 		inputPanel.add(textScrollPane, BorderLayout.CENTER);
 
+        // 输出面板
 		JPanel outputPanel = new JPanel();
 		outputPanel.setLayout(new BorderLayout());
+
 		JPanel consoleMenu = new JPanel();
-		consoleMenu.setLayout(new GridLayout(1,4,10,0));
-		consoleMenu.add(new JLabel("Console"));
 
+		consoleMenu.setLayout(new GridLayout(1,5,10,0));
+        consoleMenu.add(new JLabel("Lexical Result"));
         consoleMenu.add(isShowLex);
-
+        JButton btnClearLex = new JButton(new AbstractAction("Clear") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                lexArea.setText("");
+            }
+        });
+        consoleMenu.add(btnClearLex);
+		consoleMenu.add(new JLabel("Console"));
         consoleMenu.add(isShowTree);
-
-		JButton btnClearConsole = new JButton(new ClearAction());
+		JButton btnClearConsole = new JButton(new AbstractAction("Clear") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                consoleArea.setText("");
+            }
+        });
 		consoleMenu.add(btnClearConsole);
 		outputPanel.add(consoleMenu, BorderLayout.NORTH);
-		consoleArea.setLineWrap(true);
+
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new GridLayout(1,2,0,10));
+
+        lexArea.setLineWrap(true);
+        lexArea.setFont(new Font("宋体",0,14));
+        JScrollPane lexScrollPanel = new JScrollPane(lexArea);
+        textPanel.add(lexScrollPanel);
+
+        consoleArea.setLineWrap(true);
 		consoleArea.setFont(new Font("宋体",0,14));
 		JScrollPane consoleScrollPane = new JScrollPane(consoleArea);
-		outputPanel.add(consoleScrollPane, BorderLayout.CENTER);
+        textPanel.add(consoleScrollPane);
+
+		outputPanel.add(textPanel, BorderLayout.CENTER);
 
 		mainPanel.add(inputPanel);
 		mainPanel.add(outputPanel);
 
 		container.add(mainPanel, BorderLayout.CENTER);
+
+
 		container.add(new JLabel("TangJiong 330194737@qq.com"), BorderLayout.SOUTH);
 
 	}
@@ -143,7 +171,7 @@ public class Editor extends JFrame {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			Compiler compiler = new Compiler(textPane.getText(), new EditorIO(consoleArea));
+			Compiler compiler = new Compiler(textPane.getText(), new EditorIO(lexArea), new EditorIO(consoleArea));
             compiler.setShowLexerResult(isShowLex.getState());
             compiler.setShowAST(isShowTree.getState());
             compiler.run();
@@ -157,16 +185,6 @@ public class Editor extends JFrame {
 
 		public void actionPerformed(ActionEvent e) {
 			JOptionPane.showMessageDialog(Editor.this, "A simple CMM compiler.\n Contact 330194737@qq.com for any problem."); // ��ʾ�����Ϣ
-		}
-	}
-
-	class ClearAction extends AbstractAction{
-
-		public ClearAction(){super("Clear");}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			consoleArea.setText("");
 		}
 	}
 

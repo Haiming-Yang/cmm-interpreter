@@ -35,7 +35,7 @@ read_stmt : Read LBracket (Ident | array) RBracket LineEnd ;
 write_stmt : Write LBracket expr RBracket LineEnd;
 assign_stmt : value Assign expr LineEnd ;
 value : Ident | array | constant;
-array : Ident LMidBracket IntConstant RMidBracket ;
+array : Ident LMidBracket (IntConstant | expr) RMidBracket ;
 constant : IntConstant | RealConstant ;
 expr : expr MulDivMod expr #MulDivExpr | //乘除，取模运算
         expr AddMin expr #AddMinExpr | // 加减运算，正负号
